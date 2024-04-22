@@ -2,10 +2,9 @@ package fsa.training.ims_team01.model.dto.candidateDto;
 
 import fsa.training.ims_team01.enums.candidateEnum.CandidateStatusEnum;
 import fsa.training.ims_team01.enums.commonEnum.GenderEnum;
+import fsa.training.ims_team01.enums.commonEnum.HighestLevelEnum;
 import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
 import fsa.training.ims_team01.enums.commonEnum.SkillEnum;
-import fsa.training.ims_team01.model.entity.Employee;
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -42,7 +41,7 @@ public class CandidateCreateDto {
     private CandidateStatusEnum status = CandidateStatusEnum.OPEN;
 
     @NotNull(message = "{ME002.message}")
-    private CandidateStatusEnum highestLevel;
+    private HighestLevelEnum highestLevel;
 
 
     @NotNull(message = "{ME002.message}")

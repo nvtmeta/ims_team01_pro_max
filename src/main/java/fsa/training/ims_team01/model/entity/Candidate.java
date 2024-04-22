@@ -2,6 +2,7 @@ package fsa.training.ims_team01.model.entity;
 
 import fsa.training.ims_team01.enums.candidateEnum.CandidateStatusEnum;
 import fsa.training.ims_team01.enums.commonEnum.GenderEnum;
+import fsa.training.ims_team01.enums.commonEnum.HighestLevelEnum;
 import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
 import fsa.training.ims_team01.enums.commonEnum.SkillEnum;
 import jakarta.persistence.*;
@@ -51,7 +52,7 @@ public class Candidate {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "highest_level")
-    private CandidateStatusEnum highestLevel;
+    private HighestLevelEnum highestLevel;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "position")
@@ -73,7 +74,7 @@ public class Candidate {
 //    recruiter
     @ManyToOne
     @JoinColumn(name = "recruiter_id")
-    private Employee user;
+    private User user;
 
     @Column(name = "is_deleted", nullable = false , columnDefinition = "bit default 0")
     private Boolean deleted;
