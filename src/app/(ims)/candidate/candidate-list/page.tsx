@@ -1,26 +1,35 @@
 "use client"
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { GrView } from 'react-icons/gr'
-import { IoMdArrowDropdown } from 'react-icons/io'
 import { MdKeyboardArrowDown, MdOutlineDelete } from 'react-icons/md'
 import { BreadcrumbItem, Breadcrumbs, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Pagination } from '@nextui-org/react'
+import { CandidateInterface, CandidateResponseInterface } from '@/interface/CandidateInterface'
+import { fetchCandidateList } from '@/api/CandidateApi'
+import { useRouter } from 'next/navigation'
 
-const listForms = [
-    {
-        name: "Tim cook", email: "Timcook@gmail.com", phone: "03242304", current_position: "CEO",
-        owner_hr: "Steve job", status: "Waiting for interview", action: ""
+
+const CandidateList = () => {
+    const router = useRouter()
+
+    useEffect(() => {
+        handleFetchList()
+    }, [])
+
+    const [candidateList, setCandidateList] = useState<CandidateResponseInterface>({} as CandidateResponseInterface)
+
+    const handleFetchList = async () => {
+        const data = await fetchCandidateList()
+        console.log("data", data)
+        setCandidateList(data)
     }
-
-]
-const CandidateList = ({ setDisplayPage }: any) => {
 
 
     return (
         <>
             <Breadcrumbs className='mx-6 ' variant='solid' radius='full'>
-                <BreadcrumbItem onClick={() => setDisplayPage("list")} size='lg' className='font-bold'>Candidate List</BreadcrumbItem>
+                <BreadcrumbItem onClick={() => router.push("/candidate/candidate-list")} size='lg' className='font-bold'>Candidate List</BreadcrumbItem>
             </Breadcrumbs>
             <div className='m-6 bg-white rounded-2xl p-3 flex items-center justify-between gap-2'>
                 <div className='flex gap-2'>
@@ -58,7 +67,7 @@ const CandidateList = ({ setDisplayPage }: any) => {
                 </div>
 
                 {/* search */}
-                <Button onPress={() => setDisplayPage("ADD")} size='lg' className='bg-gradient-to-r w-44 from-sky-400 to-blue-500 font-medium p-4 text-white '>
+                <Button onPress={() => router.push("/candidate/candidate-create")} size='lg' className='bg-gradient-to-r w-44 from-sky-400 to-blue-500 font-medium p-4 text-white '>
                     Add new
                 </Button>
             </div>
@@ -79,14 +88,14 @@ const CandidateList = ({ setDisplayPage }: any) => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-500 ">
-                        {listForms?.map((item: any, index: any) => {
+                        {candidateList?.content?.map((item: CandidateInterface, index: number) => {
 
                             return (
                                 <tr className={`hover:border-slate-400 border-2 cursor-pointer  `}>
                                     {/* name */}
                                     <td className="border-b border-gray-200   text-sm ">
                                         <p className="font-medium  px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400  text-transparent bg-clip-text">
-                                            {item?.name}
+                                            {item?.fullName}
                                         </p>
                                     </td>
 
@@ -111,14 +120,14 @@ const CandidateList = ({ setDisplayPage }: any) => {
 
                                         <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
-                                            {item?.current_position}
+                                            {item?.position}
                                         </p>
                                     </td>
                                     {/* owner-Hr */}
                                     <td className=" border-b border-gray-200   text-sm ">
                                         <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
-                                            {item?.owner_hr}
+                                            {item?.recruiterName}
                                         </p>
                                     </td>
 
@@ -131,7 +140,7 @@ const CandidateList = ({ setDisplayPage }: any) => {
                                     </td>
                                     {/* updated date*/}
                                     <td className='flex  py-4 items-center justify-center gap-3'>
-                                        <GrView className='text-2xl text-blue-500 hover:scale-90 transition-all' />
+                                        <GrView onClick={() => router.push(`/candidate/${item?.id}`)} className='text-2xl text-blue-500 hover:scale-90 transition-all' />
                                         <FaEdit className='text-2xl text-blue-500 hover:scale-90 transition-all' />
                                         <MdOutlineDelete className='text-2xl text-blue-500 hover:scale-90 transition-all' />
                                     </td>

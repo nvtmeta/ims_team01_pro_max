@@ -1,9 +1,11 @@
 "use client"
 
 import { BreadcrumbItem, Breadcrumbs, Button, Chip, Select, SelectItem } from '@nextui-org/react'
-import React from 'react'
-import CandidateList from './page'
+import React, { useEffect, useState } from 'react'
 import { MdOutlineUploadFile } from 'react-icons/md'
+import { useRouter } from 'next/navigation'
+import { fetchUserList } from '@/api/UserApi'
+import { RecruiterInterface } from '@/interface/CandidateInterface'
 
 const genders = [
     { label: 'Male', value: 'male' },
@@ -32,15 +34,26 @@ const highestLevel = [
     { label: 'Master Degree,,', value: 'PhD,' },
 ]
 
-const recruiters = [
-    { label: 'Nguyễn Công Thắng', value: 'Thắng cool boy' },
-]
 
-const CandidateCreate = ({ setDisplayPage }: any) => {
+
+const CandidateCreate = () => {
+    const router = useRouter();
+
+    useEffect(() => {
+        handleFetchRecruiters()
+    }, [])
+
+    const [recruiters, setRecruiter] = useState<RecruiterInterface[]>([])
+    const handleFetchRecruiters = async () => {
+        const data = await fetchUserList()
+        console.log("data", data)
+        setRecruiter(data)
+    }
+
     return (
         <div className='mt-10 '>
             <Breadcrumbs className='mx-6 mb-4' variant='solid' radius='full'>
-                <BreadcrumbItem onClick={() => setDisplayPage("list")} size='lg' className='font-bold'>Candidate List</BreadcrumbItem>
+                <BreadcrumbItem onClick={() => router.push("/candidate/candidate-list")} size='lg' className='font-bold'>Candidate List</BreadcrumbItem>
                 <BreadcrumbItem size='lg' className='font-bold'>Create candidate</BreadcrumbItem>
             </Breadcrumbs>
             {/* personal info */}
@@ -219,9 +232,9 @@ const CandidateCreate = ({ setDisplayPage }: any) => {
                                 label="Select a status"
                                 className="max-w-xs"
                             >
-                                {recruiters.map((recruiter) => (
-                                    <SelectItem key={recruiter.value} value={recruiter.value}>
-                                        {recruiter.label}
+                                {recruiters?.map((recruiter) => (
+                                    <SelectItem key={recruiter.id} value={recruiter.id}>
+                                        {recruiter.fullName}
                                     </SelectItem>
                                 ))}
                             </Select>
@@ -303,7 +316,7 @@ const CandidateCreate = ({ setDisplayPage }: any) => {
                                  focus:bg-indigo-600 focus:text-white focus:shadow-none">
                         Submit
                     </Button>
-                    <Button onPress={() => setDisplayPage("list")} size='lg' className="grid  cursor-pointer select-none rounded-md 
+                    <Button onPress={() => router.push("/candidate/candidate-list")} size='lg' className="grid  cursor-pointer select-none rounded-md 
                                          py-2 px-5 
                                     text-center align-middle text-sm text-black hover:bg-slate-100   font-bold
                                       focus:shadow-none">Cancel</Button>

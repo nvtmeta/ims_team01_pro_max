@@ -20,7 +20,7 @@ export const menuLink = [
         id: 2,
         name: 'Candidate',
         icon: <HiBriefcase />,
-        slug: '/candidate-list'
+        slug: '/candidate/candidate-list'
     },
     {
         id: 3,
