@@ -4,11 +4,11 @@ import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button, User, Dro
 import { IoIosLogOut } from "react-icons/io";
 import { usePathname, useRouter } from "next/navigation";
 import { menuLink } from "./Sidebar";
+import { useStoreMenuName } from "@/util/zustandStorage";
 
 const NavBar = () => {
 
-    const pathname = usePathname();
-    const menuName = menuLink.find(item => item.slug === pathname)?.name;
+    const menuName = useStoreMenuName((state: any) => state.menuName)
 
     const router = useRouter();
 

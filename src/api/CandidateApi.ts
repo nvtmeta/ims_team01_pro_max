@@ -1,8 +1,22 @@
+import { CandidateInterfaceCreate } from "./../interface/CandidateInterface";
 import { instanceAxios } from "./axiosConfig";
 
 export const fetchCandidateList = async () => {
   try {
     const result = await instanceAxios.get(`/candidate`);
+    return result.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const fetchCandidatePost = async (
+  candidateInterfaceCreate: CandidateInterfaceCreate
+) => {
+  try {
+    const result = await instanceAxios.post(
+      `/candidate`,
+      candidateInterfaceCreate
+    );
     return result.data;
   } catch (error) {
     console.log(error);

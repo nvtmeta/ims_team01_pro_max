@@ -1,5 +1,6 @@
 'use client';
 
+import { useStoreMenuName } from '@/util/zustandStorage';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
@@ -60,6 +61,13 @@ const Sidebar = () => {
         }
     }, [isHovered]);
 
+    const setMenuName = useStoreMenuName(
+        (state: any) => state.setMenuName
+    );
+    const handleRedirect = (item: any) => {
+        setLinkActive(item.slug)
+        setMenuName(item.name)
+    }
 
     return (
         <div
@@ -78,7 +86,7 @@ const Sidebar = () => {
                     <div className="flex mt-3 ml-2 flex-1 flex-col">
                         <nav className="flex-1 mt-8 flex gap-5 flex-col">
                             {menuLink.map((item, index) => (
-                                <Link key={index} onClick={() => setLinkActive(item.slug)}
+                                <Link key={index} onClick={() => handleRedirect(item)}
                                     href={item.slug} title="" className={`flex cursor-pointer py-3 items-center transition-all
                                      px-4 text-xl font-medium text-blue-500 outline-none  h-16
                                       duration-100 ease-in-out focus:border-l-4 ${isLinkActive === item.slug ? 'border-l-4 border-blue-500 bg-slate-50' : ''}`}>

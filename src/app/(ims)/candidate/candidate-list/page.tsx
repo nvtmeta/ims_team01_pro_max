@@ -8,6 +8,8 @@ import { BreadcrumbItem, Breadcrumbs, Button, Dropdown, DropdownItem, DropdownMe
 import { CandidateInterface, CandidateResponseInterface } from '@/interface/CandidateInterface'
 import { fetchCandidateList } from '@/api/CandidateApi'
 import { useRouter } from 'next/navigation'
+import { RxAvatar } from 'react-icons/rx'
+import { useStoreMenuName } from '@/util/zustandStorage'
 
 
 const CandidateList = () => {
@@ -25,6 +27,15 @@ const CandidateList = () => {
         setCandidateList(data)
     }
 
+
+    const setMenuName = useStoreMenuName(
+        (state: any) => state.setMenuName
+    );
+
+    const handleRouter = (slug: string) => {
+        router.push(slug)
+        setMenuName("Candidate")
+    }
 
     return (
         <>
@@ -67,7 +78,7 @@ const CandidateList = () => {
                 </div>
 
                 {/* search */}
-                <Button onPress={() => router.push("/candidate/candidate-create")} size='lg' className='bg-gradient-to-r w-44 from-sky-400 to-blue-500 font-medium p-4 text-white '>
+                <Button onPress={() => handleRouter("/candidate/candidate-create")} size='lg' className='bg-gradient-to-r w-44 from-sky-400 to-blue-500 font-medium p-4 text-white '>
                     Add new
                 </Button>
             </div>
@@ -94,9 +105,14 @@ const CandidateList = () => {
                                 <tr className={`hover:border-slate-400 border-2 cursor-pointer  `}>
                                     {/* name */}
                                     <td className="border-b border-gray-200   text-sm ">
-                                        <p className="font-medium  px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400  text-transparent bg-clip-text">
-                                            {item?.fullName}
-                                        </p>
+
+                                        <div className="font-medium flex items-center gap-2 px-2 py-4 text-xl ">
+                                            <RxAvatar size={20} className='font-bold text-blue-500' />
+                                            <span className='bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400
+                                          text-transparent bg-clip-text'>
+                                                {item?.fullName}
+                                            </span>
+                                        </div>
                                     </td>
 
                                     {/* phone */}

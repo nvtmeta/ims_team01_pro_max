@@ -5,7 +5,11 @@ import React, { useEffect, useState } from 'react'
 import { MdOutlineUploadFile } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import { fetchUserList } from '@/api/UserApi'
-import { RecruiterInterface } from '@/interface/CandidateInterface'
+import { CandidateInterfaceCreate, RecruiterInterface } from '@/interface/CandidateInterface'
+import { useForm } from 'react-hook-form'
+import messages from '@/messages/messages'
+import { fetchCandidatePost } from '@/api/CandidateApi'
+import toast from 'react-hot-toast'
 
 const genders = [
     { label: 'Male', value: 'male' },
@@ -39,6 +43,13 @@ const highestLevel = [
 const CandidateCreate = () => {
     const router = useRouter();
 
+    const {
+        register,
+        formState: { errors },
+        handleSubmit,
+    } = useForm()
+
+
     useEffect(() => {
         handleFetchRecruiters()
     }, [])
@@ -50,6 +61,13 @@ const CandidateCreate = () => {
         setRecruiter(data)
     }
 
+    const handlePostCandidate = async (dataForm: CandidateInterfaceCreate) => {
+        console.log("dataForm", dataForm)
+        // const result = await fetchCandidatePost(dataForm)
+        toast.success(messages.ME012)
+        router.push('/candidate/candidate-list')
+    }
+
     return (
         <div className='mt-10 '>
             <Breadcrumbs className='mx-6 mb-4' variant='solid' radius='full'>
@@ -57,7 +75,7 @@ const CandidateCreate = () => {
                 <BreadcrumbItem size='lg' className='font-bold'>Create candidate</BreadcrumbItem>
             </Breadcrumbs>
             {/* personal info */}
-            <form className='mx-10 p-6 rounded-xl bg-white'>
+            <form onSubmit={handleSubmit((data) => handlePostCandidate(data as CandidateInterfaceCreate))} className='mx-10 p-6 rounded-xl bg-white'>
                 <p className='text-blue-500 font-medium mb-4 text-xl'>I. Personal Information</p>
                 <div className='flex justify-between'>
                     {/* left */}
@@ -67,83 +85,96 @@ const CandidateCreate = () => {
                                 <span className='text-red-500 '>*</span>
                             </label>
                             <input
-                                required
-                                name='fullName'
                                 placeholder="Type a name..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                {...register("fullName", { required: "FullName is required" })}
+                                aria-invalid={errors.fullName ? "true" : "false"}
                             />
                         </div>
+                        {errors.fullName && <p role="alert" className='text-red-500 ml-36 mt-3'>{messages.ME002}</p>}
                         <div className='flex items-center '>
                             <label className='w-32 font-medium' htmlFor='dob'>D.O.B {" "}
                             </label>
                             <input
                                 type='date'
                                 max={`${new Date().toISOString().split('T')[0]}`}
-                                name='dob'
                                 placeholder="Type a name..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                aria-invalid={errors.dob ? "true" : "false"}
+                                {...register("dob", { required: "DOB is required" })}
                             />
                         </div>
+                        {errors.dob && <p role="alert" className=' text-red-500 ml-36 mt-3'>{messages.ME002}</p>}
                         <div className='flex items-center '>
                             <label className='w-32 font-medium' htmlFor='phone'>Phone number{" "}
                             </label>
                             <input
                                 type='number'
-                                name='phone'
                                 placeholder="Type a number..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                aria-invalid={errors.phone ? "true" : "false"}
+                                {...register("phone", { required: "Phone is required" })}
                             />
                         </div>
+                        {errors.phone && <p role="alert" className=' text-red-500 mt-3 ml-36'>{messages.ME002}</p>}
 
                     </div>
                     {/* right */}
                     <div className='flex flex-col gap-3'>
                         <div className='flex items-center'>
-                            <label className='w-20 font-medium' htmlFor='email'>Email {" "}
+                            <label className='w-28 font-medium' htmlFor='email'>Email {" "}
                                 <span className='text-red-500 '>*</span>
                             </label>
                             <input
                                 type='email'
-                                name='email'
                                 placeholder="Type a email..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                aria-invalid={errors.email ? "true" : "false"}
+                                {...register("email", { required: "Email is required" })}
                             />
                         </div>
+                        {errors.email && <p role="alert" className=' text-red-500 ml-32'>{messages.ME002}</p>}
                         <div className='flex items-center '>
-                            <label className='w-20 font-medium' htmlFor='address'>Address {" "}
+                            <label className='w-28 font-medium' htmlFor='address'>Address {" "}
                             </label>
                             <input
-                                name='address'
                                 placeholder="Type a name..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                aria-invalid={errors.address ? "true" : "false"}
+                                {...register("address", { required: "Address is required" })}
                             />
                         </div>
+                        {errors.address && <p role="alert" className='text-red-500 ml-32'>{messages.ME002}</p>}
                         <div className='flex items-center'>
-                            <label className='w-24 font-medium' htmlFor='gender'>Gender{" "}
+                            <label className='w-32 font-medium' htmlFor='gender'>Gender{" "}
                                 <span className='text-red-500 '>*</span>
                             </label>
                             <Select
                                 variant="bordered"
                                 className="max-w-xs"
                                 label="Select a gender"
+                                {...register("gender", { required: "Gender is required" })}
+                                aria-invalid={errors.gender ? "true" : "false"}
                             >
                                 {genders.map((gender) => (
                                     <SelectItem key={gender.value} value={gender.value}>
                                         {gender.label}
                                     </SelectItem>
                                 ))}
+
                             </Select>
                         </div>
+                        {errors.gender && <p role="alert" className=' text-red-500 ml-32'>{messages.ME002}</p>}
 
                     </div>
                 </div>
@@ -165,11 +196,14 @@ const CandidateCreate = () => {
                                 </div>
                                 <label htmlFor="cvAttachment" className="flex items-center cursor-pointer">
                                     <MdOutlineUploadFile />
-                                    <input id="cvAttachment" type="file" className="hidden" />
+                                    <input id="cvAttachment" type="file" className="hidden"
+                                        {...register("cvAttachment", { required: "CV Attachment is required" })}
+                                        aria-invalid={errors.cvAttachment ? "true" : "false"}
+                                    />
                                 </label>
                             </div>
-
                         </div>
+                        {errors.cvAttachment && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
                         <div className='flex items-center mt-4'>
                             <label className='w-32 font-medium' htmlFor='position'>Position {" "}
                                 <span className='text-red-500 '>*</span>
@@ -178,6 +212,8 @@ const CandidateCreate = () => {
                                 variant="bordered"
                                 label="Select a position"
                                 className="max-w-xs"
+                                {...register("position", { required: "Position is required" })}
+                                aria-invalid={errors.position ? "true" : "false"}
                             >
                                 {positions.map((position) => (
                                     <SelectItem key={position.value} value={position.value}>
@@ -186,6 +222,7 @@ const CandidateCreate = () => {
                                 ))}
                             </Select>
                         </div>
+                        {errors.position && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
 
                         <div className='flex items-center mt-4'>
                             <label className='w-32 font-medium' htmlFor='phone'>Skills{" "}
@@ -211,6 +248,8 @@ const CandidateCreate = () => {
                                         </div>
                                     );
                                 }}
+                                {...register("skills", { required: "Skills is required" })}
+                                aria-invalid={errors.skills ? "true" : "false"}
                             >
                                 {(user: any) => (
                                     <SelectItem key={user.value} >
@@ -223,6 +262,7 @@ const CandidateCreate = () => {
                                 )}
                             </Select>
                         </div>
+                        {errors.skills && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
                         <div className='flex items-center mt-6'>
                             <label className='w-32 font-medium' htmlFor='recruiter'>Recruiter {" "}
                                 <span className='text-red-500 '>*</span>
@@ -251,13 +291,15 @@ const CandidateCreate = () => {
                             <input
                                 maxLength={500}
                                 type='text'
-                                name='note'
                                 placeholder="Type a note..."
                                 className="ml-4 border-1 p-3 mt-3
                                    sm:mr-4 sm:mb-0 mb-2 w-96 rounded-md  
                                  outline-none ring-blue-600 focus:ring-1 "
+                                {...register("note", { required: "Note is required", maxLength: 500 })}
+                                aria-invalid={errors.note ? "true" : "false"}
                             />
                         </div>
+                        {errors.note && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
                         <div className='flex items-center mt-4'>
                             <label className='w-32 font-medium' htmlFor='position'>Status {" "}
                                 <span className='text-red-500 '>*</span>
@@ -266,6 +308,8 @@ const CandidateCreate = () => {
                                 variant="bordered"
                                 label="Select a status"
                                 className="max-w-xs"
+                                {...register("status", { required: "Status is required" })}
+                                aria-invalid={errors.status ? "true" : "false"}
                             >
                                 {statusList.map((status) => (
                                     <SelectItem key={status.value} value={status.value}>
@@ -274,6 +318,7 @@ const CandidateCreate = () => {
                                 ))}
                             </Select>
                         </div>
+                        {errors.status && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
                         <div className='flex items-center'>
                             <label className='w-32 font-medium' htmlFor='gender'>Year of Experience {" "}
                             </label>
@@ -292,9 +337,9 @@ const CandidateCreate = () => {
                             </label>
                             <Select
                                 variant="bordered"
-
                                 label="Select highest level"
                                 className="max-w-xs"
+                                {...register("highestLevel", { required: "Highest level is required" })}
                             >
                                 {highestLevel.map((status) => (
                                     <SelectItem key={status.value} value={status.value}>
@@ -303,6 +348,7 @@ const CandidateCreate = () => {
                                 ))}
                             </Select>
                         </div>
+                        {errors.highestLevel && <p role="alert" className=' text-red-500 ml-32 mt-2'>{messages.ME002}</p>}
                     </div>
                 </div>
 
