@@ -1,0 +1,31 @@
+package fsa.training.ims_team01.model.dto.candidateDto;
+
+import fsa.training.ims_team01.enums.candidateEnum.CandidateStatusEnum;
+import fsa.training.ims_team01.enums.commonEnum.HighestLevelEnum;
+import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class CandidateListDto {
+    private Long id;
+    private String fullName;
+    private String email;
+    private String phone;
+    private CandidateStatusEnum status;
+    private HighestLevelEnum highestLevel;
+    private PositionEnum position;
+
+
+    public CandidateListDto(Long id, String fullName, String email, String phone, CandidateStatusEnum status,
+                            HighestLevelEnum highestLevel, PositionEnum position) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.phone = phone;
+        this.status = status;
+        this.highestLevel = highestLevel;
+        this.position = position;
+    }
+}
