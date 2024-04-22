@@ -1,7 +1,7 @@
 package fsa.training.ims_team01.model.entity;
 
 import fsa.training.ims_team01.enums.commonEnum.DepartmentEnum;
-import fsa.training.ims_team01.enums.userEnum.GenderEnum;
+import fsa.training.ims_team01.enums.userEnum.GenderUserEnum;
 import fsa.training.ims_team01.enums.userEnum.UserRoleEnum;
 import fsa.training.ims_team01.enums.userEnum.UserStatusEnum;
 import jakarta.persistence.*;
@@ -41,7 +41,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
-    private GenderEnum gender;
+    private GenderUserEnum gender;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
