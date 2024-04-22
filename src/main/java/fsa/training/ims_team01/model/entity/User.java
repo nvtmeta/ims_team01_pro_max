@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "_user")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Employee {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -63,5 +63,4 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private UserStatusEnum status = UserStatusEnum.ACTIVE;
-
 }

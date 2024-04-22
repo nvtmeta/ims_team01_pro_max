@@ -3,6 +3,7 @@ package fsa.training.ims_team01.model.dto.candidateDto;
 import fsa.training.ims_team01.enums.candidateEnum.CandidateStatusEnum;
 import fsa.training.ims_team01.enums.commonEnum.HighestLevelEnum;
 import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
+import fsa.training.ims_team01.model.dto.userDto.RecruiterDto;
 import lombok.*;
 
 @Getter
@@ -16,10 +17,11 @@ public class CandidateListDto {
     private CandidateStatusEnum status;
     private HighestLevelEnum highestLevel;
     private PositionEnum position;
+    private String recruiterName;
 
 
-    public CandidateListDto(Long id, String fullName, String email, String phone, CandidateStatusEnum status,
-                            HighestLevelEnum highestLevel, PositionEnum position) {
+    public CandidateListDto(Long id, String fullName, String email, String phone, CandidateStatusEnum status, HighestLevelEnum highestLevel,
+                            PositionEnum position, String recruiterName) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -27,5 +29,9 @@ public class CandidateListDto {
         this.status = status;
         this.highestLevel = highestLevel;
         this.position = position;
+        this.recruiterName = recruiterName;
     }
+
+
+
 }

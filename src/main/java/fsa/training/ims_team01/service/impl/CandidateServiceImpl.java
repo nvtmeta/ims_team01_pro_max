@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 
 @Service
 public class CandidateServiceImpl implements CandidateService {
@@ -23,13 +21,15 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public Page<CandidateListDto> getCandidateList(Pageable pageable) {
-       return  candidateRepository.findAllByDeletedFalse(pageable);
-
-
+        return candidateRepository.findAllByDeletedFalse(pageable);
     }
 
     @Override
-    public CandidateCreateDto createCandidate(CandidateCreateDto candidateCreateDto) {
-        return null;
+    public Candidate createCandidate(CandidateCreateDto candidateCreateDto) {
+        Candidate candidate = new Candidate();
+        BeanUtils.copyProperties(candidateCreateDto, candidate);
+        System.out.println("candidate: " + candidate);
+        candidate = candidateRepository.save(candidate);
+        return candidate;
     }
 }

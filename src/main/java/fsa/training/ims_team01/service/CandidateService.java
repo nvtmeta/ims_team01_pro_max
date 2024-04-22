@@ -2,6 +2,7 @@ package fsa.training.ims_team01.service;
 
 import fsa.training.ims_team01.model.dto.candidateDto.CandidateCreateDto;
 import fsa.training.ims_team01.model.dto.candidateDto.CandidateListDto;
+import fsa.training.ims_team01.model.entity.Candidate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -13,5 +14,5 @@ public interface CandidateService {
     public Page<CandidateListDto> getCandidateList(Pageable pageable);
 
     //    create candidate
-    public CandidateCreateDto createCandidate(CandidateCreateDto candidateCreateDto);
+    public Candidate createCandidate(CandidateCreateDto candidateCreateDto);
 }

@@ -13,9 +13,13 @@ import org.springframework.stereotype.Repository;
 public interface CandidateRepository extends JpaRepository<Candidate, Long> {
 
     @Query(value = """
-            SELECT new fsa.training.ims_team01.model.dto.candidateDto.CandidateListDto(c.id, c.fullName, c.email, c.phone,  c.status, c.highestLevel, c.position)\s
-                    FROM Candidate c WHERE c.deleted = false
-            """)
+                    SELECT new fsa.training.ims_team01.model.dto.candidateDto.CandidateListDto(
+                c.id, c.fullName, c.email, c.phone, c.status, c.highestLevel, c.position, u.fullName
+            )
+                    FROM Candidate c
+                     JOIN User u ON c.user.id = u.id
+                     WHERE c.deleted = false
+                    """)
     Page<CandidateListDto> findAllByDeletedFalse(Pageable pageable);
 
 }
