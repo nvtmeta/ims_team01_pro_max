@@ -4,7 +4,6 @@ import fsa.training.ims_team01.enums.candidateEnum.CandidateStatusEnum;
 import fsa.training.ims_team01.enums.commonEnum.GenderEnum;
 import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
 import fsa.training.ims_team01.enums.commonEnum.SkillEnum;
-import fsa.training.ims_team01.enums.userEnum.GenderUserEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +26,7 @@ public class Candidate {
     @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "phone")
@@ -74,7 +73,7 @@ public class Candidate {
 //    recruiter
     @ManyToOne
     @JoinColumn(name = "recruiter_id")
-    private User user;
+    private Employee user;
 
     @Column(name = "is_deleted", nullable = false , columnDefinition = "bit default 0")
     private Boolean deleted;

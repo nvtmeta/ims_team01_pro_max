@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "user")
+@Table(name = "employee")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,7 @@ public class User {
     @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name = "full_name" ,  nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(name = "dob", nullable = false)
@@ -52,17 +52,16 @@ public class User {
     private GenderUserEnum gender;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_role")
+    @Column(name = "role")
     private UserRoleEnum role;
 
-//    department
+    //    department
     @Enumerated(EnumType.STRING)
     @Column(name = "department")
     private DepartmentEnum department;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_status", columnDefinition = "ENUM('ACTIVE', 'INACTIVE') DEFAULT 'ACTIVE'")
-    private UserStatusEnum status;
-
+    @Column(name = "status")
+    private UserStatusEnum status = UserStatusEnum.ACTIVE;
 
 }
