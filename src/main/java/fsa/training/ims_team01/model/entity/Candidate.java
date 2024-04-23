@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "candidate")
@@ -31,7 +32,7 @@ public class Candidate {
     private String email;
 
     @Column(name = "phone")
-    private String phone;
+    private Integer phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender")
@@ -59,8 +60,8 @@ public class Candidate {
     private PositionEnum position;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "skill")
-    private SkillEnum skill;
+    @Column(name = "skills")
+    private Set<SkillEnum> skills;
 
     @Column(name = "yoe")
     private Integer yoe;
@@ -71,10 +72,8 @@ public class Candidate {
     @Column(name = "cv_attachment")
     private byte[] cvAttachment;
 
-//    recruiter
-    @ManyToOne
-    @JoinColumn(name = "recruiter_id")
-    private User user;
+    @Column(name = "recruiter_id")
+    private Long recruiterId;
 
     @Column(name = "is_deleted", nullable = false , columnDefinition = "bit default 0")
     private Boolean deleted;

@@ -1,5 +1,7 @@
 package fsa.training.ims_team01.resource;
 
+import fsa.training.ims_team01.exception.CandidateException;
+import fsa.training.ims_team01.exception.GlobalExceptionHandler;
 import fsa.training.ims_team01.model.dto.candidateDto.CandidateCreateDto;
 import fsa.training.ims_team01.model.dto.candidateDto.CandidateListDto;
 import fsa.training.ims_team01.model.entity.Candidate;
@@ -10,11 +12,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/candidate")
+@RequestMapping("/api/v1/candidate")
 public class CandidateResource {
 
     private final CandidateService candidateService;
@@ -31,8 +34,11 @@ public class CandidateResource {
     }
 
     @PostMapping
-    public ResponseEntity<Candidate> createCandidate(@RequestBody @Valid CandidateCreateDto candidateCreateDto) {
-        System.out.println("test");
+    public ResponseEntity<Candidate> createCandidate(@RequestBody @Valid CandidateCreateDto candidateCreateDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("Binding result has errors: " + bindingResult.getAllErrors());
+            throw new CandidateException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+        }
         System.out.println("candidateCreateDto: " + candidateCreateDto);
         Candidate candidate = candidateService.createCandidate(candidateCreateDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(candidate);
