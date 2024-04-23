@@ -3,28 +3,31 @@
 import React, { useEffect, useState } from 'react'
 import { FaEdit } from 'react-icons/fa'
 import { GrView } from 'react-icons/gr'
-import { MdKeyboardArrowDown, MdOutlineDelete } from 'react-icons/md'
-import { BreadcrumbItem, Breadcrumbs, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Pagination } from '@nextui-org/react'
+import { MdDelete, MdKeyboardArrowDown, MdOutlineDelete } from 'react-icons/md'
+import { BreadcrumbItem, Breadcrumbs, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Input, Pagination, useDisclosure } from '@nextui-org/react'
 import { CandidateInterface, CandidateResponseInterface } from '@/interface/CandidateInterface'
-import { fetchCandidateList } from '@/api/CandidateApi'
+import { fetchCandidatePage } from '@/api/CandidateApi'
 import { useRouter } from 'next/navigation'
 import { RxAvatar } from 'react-icons/rx'
 import { useStoreMenuName } from '@/util/zustandStorage'
+import ModalComponent from '@/util/ModalComponent'
+import { RiEditBoxFill } from 'react-icons/ri'
 
 
 const CandidateList = () => {
     const router = useRouter()
+    const [currentPage, setCurrentPage] = React.useState(0);
 
     useEffect(() => {
         handleFetchList()
-    }, [])
+    }, [currentPage])
 
-    const [candidateList, setCandidateList] = useState<CandidateResponseInterface>({} as CandidateResponseInterface)
+    const [candidatePage, setCandidatePage] = useState<CandidateResponseInterface>({} as CandidateResponseInterface)
 
     const handleFetchList = async () => {
-        const data = await fetchCandidateList()
+        const data = await fetchCandidatePage(currentPage - 1, 10)
         console.log("data", data)
-        setCandidateList(data)
+        setCandidatePage(data)
     }
 
 
@@ -37,18 +40,20 @@ const CandidateList = () => {
         setMenuName("Candidate")
     }
 
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
     return (
         <>
             <Breadcrumbs className='mx-6 ' variant='solid' radius='full'>
                 <BreadcrumbItem onClick={() => router.push("/candidate/candidate-list")} size='lg' className='font-bold'>Candidate List</BreadcrumbItem>
             </Breadcrumbs>
-            <div className='m-6 bg-white rounded-2xl p-3 flex items-center justify-between gap-2'>
-                <div className='flex gap-2'>
+            <div className='m-6  rounded-2xl p-3 flex items-center justify-between gap-2'>
+                <div className='flex gap-3'>
                     <Input
+                        variant='bordered'
                         size='lg'
-                        isClearable
                         radius="lg"
-                        className='w-96 bg-slate-100 rounded-xl'
+                        className='w-96 rounded-xl bg-white border-none'
                         placeholder="Type to search..."
                         startContent={
                             <SearchIcon className="text-black/50 mb-0.5   pointer-events-none flex-shrink-0" />
@@ -56,7 +61,7 @@ const CandidateList = () => {
                     />
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button size='lg' className='bg-slate-100 p-3 w-64 justify-between rounded-xl flex gap-2 items-center'>
+                            <Button size='lg' className='bg-white ml-4 p-3 w-64 justify-between rounded-xl flex gap-2 items-center'>
                                 <p className='font-medium'>Status</p>
                                 <MdKeyboardArrowDown className='text-4xl font-bold' />
                             </Button>
@@ -99,14 +104,14 @@ const CandidateList = () => {
                         </tr>
                     </thead>
                     <tbody className="text-gray-500 ">
-                        {candidateList?.content?.map((item: CandidateInterface, index: number) => {
+                        {candidatePage?.content?.map((item: CandidateInterface, index: number) => {
 
                             return (
                                 <tr className={`hover:border-slate-400 border-2 cursor-pointer  `}>
                                     {/* name */}
                                     <td className="border-b border-gray-200   text-sm ">
 
-                                        <div className="font-medium flex items-center gap-2 px-2 py-4 text-xl ">
+                                        <div className="font-medium flex items-center gap-2 px-2 py-4 text-lg ">
                                             <RxAvatar size={20} className='font-bold text-blue-500' />
                                             <span className='bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400
                                           text-transparent bg-clip-text'>
@@ -117,14 +122,14 @@ const CandidateList = () => {
 
                                     {/* phone */}
                                     <td className=" border-b border-gray-200   gap-3 justify-start  text-sm ">
-                                        <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
+                                        <p className="font-medium   px-2 py-4 text-lg bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
                                             {item?.phone}
                                         </p>
                                     </td>
                                     {/* email */}
                                     <td className="border-b border-gray-200  gap-3 justify-start   text-sm ">
-                                        <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
+                                        <p className="font-medium   px-2 py-4 text-lg bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
                                             {item?.email}
                                         </p>
@@ -134,14 +139,14 @@ const CandidateList = () => {
                                     {/* current_position */}
                                     <td className=" border-b border-gray-200   text-sm ">
 
-                                        <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
+                                        <p className="font-medium   px-2 py-4 text-lg bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
                                             {item?.position}
                                         </p>
                                     </td>
                                     {/* owner-Hr */}
                                     <td className=" border-b border-gray-200   text-sm ">
-                                        <p className="font-medium   px-2 py-4 text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
+                                        <p className="font-medium   px-2 py-4 text-lg bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
                                             {item?.recruiterName}
                                         </p>
@@ -149,16 +154,16 @@ const CandidateList = () => {
 
                                     {/* status */}
                                     <td className=" border-b border-gray-200   text-sm ">
-                                        <p className="font-medium  px-2 py-4  text-xl bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
+                                        <p className="font-medium  px-2 py-4  text-lg bg-gradient-to-r from-blue-600 via-blue-400 to-indigo-400 
                                                       text-transparent bg-clip-text">
                                             {item?.status}
                                         </p>
                                     </td>
                                     {/* updated date*/}
                                     <td className='flex  py-4 items-center justify-center gap-3'>
-                                        <GrView onClick={() => router.push(`/candidate/${item?.id}`)} className='text-2xl text-blue-500 hover:scale-90 transition-all' />
-                                        <FaEdit className='text-2xl text-blue-500 hover:scale-90 transition-all' />
-                                        <MdOutlineDelete className='text-2xl text-blue-500 hover:scale-90 transition-all' />
+                                        <GrView onClick={() => router.push(`/candidate/${item?.id}`)} className='text-3xl text-blue-500 hover:scale-90 transition-all' />
+                                        <RiEditBoxFill onClick={() => router.push(`/candidate/edit/${item?.id}`)} className='text-3xl text-blue-500 hover:scale-90 transition-all' />
+                                        <MdDelete onClick={onOpen} className='text-3xl text-blue-500 hover:scale-90 transition-all' />
                                     </td>
 
                                 </tr>
@@ -169,8 +174,11 @@ const CandidateList = () => {
                 </table>
 
                 {/* pagination */}
-                <Pagination className='mt-10 flex justify-center' total={10} initialPage={1} />
-
+                <Pagination
+                    page={currentPage}
+                    onChange={setCurrentPage}
+                    className='mt-10 flex justify-center' size='lg' total={candidatePage.totalPages} initialPage={0} />
+                <ModalComponent isOpen={isOpen} onOpen={onOpen} onOpenChange={onOpenChange} title={"Are you sure you want to delete this candidate?"} />
             </div>
         </>
     )

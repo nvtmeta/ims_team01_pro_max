@@ -2,19 +2,19 @@
 
 import { useStoreMenuName } from '@/util/zustandStorage';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import { FiHome } from 'react-icons/fi';
-import { HiOutlineChatAlt2, HiOutlineClipboardList } from 'react-icons/hi';
-import { HiBriefcase, HiMiniUserGroup } from 'react-icons/hi2';
-import { PiAddressBook } from 'react-icons/pi';
-import { VscAccount } from 'react-icons/vsc';
+import { AiFillHome } from 'react-icons/ai';
+import { FaFileAlt, FaUserFriends } from 'react-icons/fa';
+import { GrSchedules } from 'react-icons/gr';
+import { HiBriefcase } from 'react-icons/hi2';
+import { MdTask } from 'react-icons/md';
+import { RiCalendarScheduleFill } from 'react-icons/ri';
 
 export const menuLink = [
     {
         id: 1,
         name: 'Home',
-        icon: <FiHome />,
+        icon: <AiFillHome />,
         slug: '/'
     },
     {
@@ -26,25 +26,25 @@ export const menuLink = [
     {
         id: 3,
         name: 'Job',
-        icon: <HiOutlineChatAlt2 />,
+        icon: <MdTask />,
         slug: '/jobs'
     },
     {
         id: 4,
         name: 'Interview',
-        icon: <HiMiniUserGroup />,
+        icon: <RiCalendarScheduleFill />,
         slug: '/interviews'
     },
     {
         id: 5,
         name: 'Offer',
-        icon: <HiOutlineClipboardList />,
-        slug: '/offers'
+        icon: <FaFileAlt />,
+        slug: '/offers',
     },
     {
         id: 5,
         name: 'User',
-        icon: <VscAccount />,
+        icon: <FaUserFriends />,
         slug: '/suers'
     },
 ]
@@ -65,6 +65,7 @@ const Sidebar = () => {
         (state: any) => state.setMenuName
     );
     const handleRedirect = (item: any) => {
+        console.log("item", item)
         setLinkActive(item.slug)
         setMenuName(item.name)
     }
@@ -76,7 +77,7 @@ const Sidebar = () => {
             className="min-h-[50rem]  bg-[#f5f5f7]">
             <div className={`h-full  transition-width ${isHovered ? 'w-64 transition-all' : 'w-20 transition-all'} `}>
                 <div className="flex h-full flex-grow flex-col overflow-y-auto   bg-white pt-5 shadow-md">
-                    <Link onClick={() => setLinkActive("/")} href={"/"} className={`flex gap-3  items-center px-4  ${isHovered && 'ml-10 transition-all'}`}>
+                    <Link onClick={() => handleRedirect({ name: "Home", slug: "/" })} href={"/"} className={`flex gap-3  items-center px-4  ${isHovered && 'ml-10 transition-all'}`}>
                         <img className="h-12 w-auto max-w-full align-middle" src="https://cdn-icons-png.freepik.com/256/13065/13065925.png?ga=GA1.1.1725227974.1708702988&semt=ais_hybrid" alt="" />
                         {isHovered && <span className='font-bold bg-gradient-to-r from-sky-400 to-blue-500 bg-indigo-500
                         text-transparent bg-clip-text text-3xl transition-all

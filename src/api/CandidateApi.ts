@@ -1,9 +1,11 @@
 import { CandidateInterfaceCreate } from "./../interface/CandidateInterface";
 import { instanceAxios } from "./axiosConfig";
 
-export const fetchCandidateList = async () => {
+export const fetchCandidatePage = async (page: number, size: number) => {
   try {
-    const result = await instanceAxios.get(`/candidate`);
+    const result = await instanceAxios.get(
+      `/candidate?size=${size}&page=${page}`
+    );
     return result.data;
   } catch (error) {
     console.log(error);

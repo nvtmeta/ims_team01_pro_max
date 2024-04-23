@@ -62,8 +62,8 @@ export interface CandidateInterfaceCreate {
   status: CandidateStatusEnum; // Assuming CandidateStatusEnum is defined elsewhere
   highestLevel: HighestLevelEnum; // Assuming HighestLevelEnum is defined elsewhere
   position: PositionEnum; // Assuming PositionEnum is defined elsewhere
-  skill?: SkillEnum; // Optional SkillEnum field
+  skills?: string[]; // Optional SkillEnum field
   yoe?: number; // Optional number field
-  cvAttachment: string; // Assuming cvAttachment is converted to base64 encoded string
+  // cvAttachment: File; // Assuming cvAttachment is converted to base64 encoded string
   recruiterId: number;
 }
