@@ -7,14 +7,15 @@ import fsa.training.ims_team01.enums.commonEnum.PositionEnum;
 import fsa.training.ims_team01.enums.commonEnum.SkillEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CandidateCreateDto {
 
     @NotNull(message = "{ME002.message}")
@@ -25,7 +26,7 @@ public class CandidateCreateDto {
     private String email;
 
     @NotNull(message = "{ME002.message}")
-    private String phone;
+    private Integer phone;
 
     @NotNull(message = "{ME002.message}")
     private GenderEnum gender;
@@ -48,13 +49,15 @@ public class CandidateCreateDto {
     private PositionEnum position;
 
     @NotNull(message = "{ME002.message}")
-    private SkillEnum skill;
+    private Set<SkillEnum> skills;
 
     private Integer yoe;
 
-    @NotNull(message = "{ME002.message}")
+    //    @NotNull(message = "{ME002.message}")
     private byte[] cvAttachment;
 
     @NotNull(message = "{ME002.message}")
     private Long recruiterId;
+
+    private Boolean deleted = false;
 }
